@@ -2,6 +2,7 @@ package com.myCompagny.Apigestionregions.Filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 // cette classe va étender de UsernamePasswordAuthenticationFilter pour la génération du Token
@@ -62,7 +65,18 @@ public class jwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
                         .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())) // convertir la liste des authority en lsite de string
                         .sign(algo1); // On signe maintenant avec le même algorithme
 
-        // Maintenant envoi le jwt au client, on le passe dans le paramètre du Header
-        response.setHeader("Authorization", jwtAccessToken);
+        // Le RefreshToken
+        String jwtRefreshToken = JWT.create()
+                .withSubject(user.getUsername()) // username
+                .withExpiresAt(new Date(System.currentTimeMillis()+30*60*1000)) // date d'expiration
+                .withIssuer(request.getRequestURL().toString()) // Le nom de l'application qui a généré le token
+                .sign(algo1); // On signe maintenant avec le même algorithme
+
+        Map<String, String> idToken = new HashMap<>();
+        idToken.put("access_Token", jwtAccessToken);
+        idToken.put("refresh_Token", jwtRefreshToken);
+        response.setContentType("application/json");
+        // Maintenant envoi le jwt au client,dans le corps de la reponse en format JSON
+        new ObjectMapper().writeValue(response.getOutputStream(),idToken);
     }
 }
