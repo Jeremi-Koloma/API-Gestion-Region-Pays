@@ -5,6 +5,7 @@ import com.myCompagny.Apigestionregions.Modele.AppUser;
 import com.myCompagny.Apigestionregions.Repository.AppRoleRepository;
 import com.myCompagny.Apigestionregions.Repository.AppUserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +20,16 @@ public class AccountServiceImpl implements AccountService{
     // Injectons nos deux Repositories
     private AppUserRepository appUserRepository;
     private AppRoleRepository appRoleRepository;
+    // Injections PasswordEncoder
+    private PasswordEncoder passwordEncoder;
 
     @Override // Ajouter un utilisateur
     public AppUser addNewUser(AppUser appUser) {
+        // Encoder les mots de passe des users en les ajoutant
+        // On récupère le password saisi par l'utilisateur
+        String pw = appUser.getPassword();
+        // Maintent on encode le password
+        appUser.setPassword(passwordEncoder.encode(pw));
         return appUserRepository.save(appUser); // Pour la persistence des users dans la database
     }
 
