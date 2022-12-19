@@ -1,11 +1,13 @@
 package com.myCompagny.Apigestionregions;
 
+import com.myCompagny.Apigestionregions.Filters.JwtAuthorizationFilter;
 import com.myCompagny.Apigestionregions.Filters.jwtAuthenticationFilter;
 import com.myCompagny.Apigestionregions.Modele.AppUser;
 import com.myCompagny.Apigestionregions.Service.AccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,10 +63,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         // Utiliser maintent la notion de StateLess
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // Authoriser le refreshToken à passer
+        http.authorizeRequests().antMatchers("/RegionUsers/refreshToken/**" ,"/login/**").permitAll();
+        // Gestion des Droits
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/RegionUsers/addUser/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/RegionUsers/users/**").hasAuthority("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/RegionUsers/profile/**").hasAuthority("USER");
         // toutes les requêtes doivent être identifiées
         http.authorizeRequests().anyRequest().authenticated();
         // Ajoutons les filtres venant de la classe jwtAuthenticationFilter
         http.addFilter(new jwtAuthenticationFilter(authenticationManagerBean()));
+        // Ajoutons le filtre venant de la classe jwtAuthorization
+        http.addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     // WebSecurityConfigurerAdapter a une méthode authenticationManagerBean

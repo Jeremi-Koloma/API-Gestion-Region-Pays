@@ -3,6 +3,7 @@ package com.myCompagny.Apigestionregions.Filters;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myCompagny.Apigestionregions.Controller.JWTUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,11 +57,11 @@ public class jwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 
         // Le Header du token
         // Pour la signature du jwt choissons l'algorithme
-        Algorithm algo1 =  Algorithm.HMAC256("monSecretJeremi123");
+        Algorithm algo1 =  Algorithm.HMAC256(JWTUtil.SECRET);
         // Générons le token
         String jwtAccessToken = JWT.create()
                 .withSubject(user.getUsername()) // username
-                        .withExpiresAt(new Date(System.currentTimeMillis()+5*60*1000)) // date d'expiration
+                        .withExpiresAt(new Date(System.currentTimeMillis()+JWTUtil.EXPIRE_ACCESS_TOKEN)) // date d'expiration
                         .withIssuer(request.getRequestURL().toString()) // Le nom de l'application qui a généré le token
                         .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())) // convertir la liste des authority en lsite de string
                         .sign(algo1); // On signe maintenant avec le même algorithme
@@ -68,7 +69,7 @@ public class jwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
         // Le RefreshToken
         String jwtRefreshToken = JWT.create()
                 .withSubject(user.getUsername()) // username
-                .withExpiresAt(new Date(System.currentTimeMillis()+30*60*1000)) // date d'expiration
+                .withExpiresAt(new Date(System.currentTimeMillis()+JWTUtil.EXPIRE_REFRESH_TOKEN)) // date d'expiration
                 .withIssuer(request.getRequestURL().toString()) // Le nom de l'application qui a généré le token
                 .sign(algo1); // On signe maintenant avec le même algorithme
 
