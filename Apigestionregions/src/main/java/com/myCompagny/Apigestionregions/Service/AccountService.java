@@ -18,7 +18,7 @@ public interface AccountService  {
     void addRoleToUser (String userName, String roleName);
 
     // une méthode qui permet de charger un user pas son Nom;
-    AppUser loadUserByUsername (String userName);
+    AppUser loadUserByUsername (String username);
 
     // Une méthode qui permet de retourner une liste des utilisateurs
     List<AppUser> listUsers();

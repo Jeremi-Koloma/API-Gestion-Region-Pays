@@ -1,5 +1,6 @@
 package com.myCompagny.Apigestionregions.Modele;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +16,15 @@ import java.util.Collection;
 @AllArgsConstructor // Un constructeur avec tous les paramètres
 @NoArgsConstructor // Un constructeur sans paramètre
 public class AppUser {
-    @Id // Identifier cette proriété comme notre id;
+    @Id // Identifier cette proriété comme notre id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Générer notre clé primaire
     private Long id;
 
     private String username;
+    // Cacher le mot de passe s'afficher dans les attrubits
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY )
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER) // un user peut avoir plusieurs rôles, et un rôle concerne plusieurs users
+    @ManyToMany(fetch = FetchType.EAGER) // un user peut avoir plusieurs rôles et un rôle concerne plusieurs users
     private Collection<AppRole> appRoles = new ArrayList<>();
 }
