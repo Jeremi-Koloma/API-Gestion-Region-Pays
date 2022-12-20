@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     //  Une méthode qui permet de retourner un User par son nom d'utilisateur pour authentification
-    AppUser findByUsername (String userName);
+    AppUser findByUsername (String username);
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // Identifier cette classe comme étant un Controller;
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("pays")
 @AllArgsConstructor // Pour l'injection de notre interface PaysService;
 @Api(value = "hello", description = "Les fonctionnalités de mon API de Tourisme : PAYS ") // Swagger;

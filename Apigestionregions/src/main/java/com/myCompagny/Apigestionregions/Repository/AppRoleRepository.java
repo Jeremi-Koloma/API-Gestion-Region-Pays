@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppRoleRepository extends JpaRepository <AppRole, Long> {
     // Une méthode qui permet de retourner les roles avec le nom du role pour authentification;
-    AppRole findByRoleName (String roleName);
+    AppRole findByRoleName (String rolename);
 }

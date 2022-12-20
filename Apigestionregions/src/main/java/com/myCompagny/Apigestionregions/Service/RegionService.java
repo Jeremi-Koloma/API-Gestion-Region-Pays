@@ -12,6 +12,9 @@ public interface RegionService {
     // Une méthode va retourné une liste de Region (Modele); // methode READ
     List<Region> lire();
 
+    // Retourner une seule Region;
+    Region recupererUneRegion(Long id);
+
     // Une méthode va retourné une Region (Modele), qui va prendre parm (idRegion, et la Region); // methode UPDATE
     Region modifier(Long idRegion, Region region);
 

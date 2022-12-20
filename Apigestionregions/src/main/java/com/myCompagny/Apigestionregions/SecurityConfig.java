@@ -60,7 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Ici on spécifie les Droits d'accès des requêtes
 
         //Désactiver le token csrf générer Spring sécurity pour qu'il laisse passer les requêtes
-        http.csrf().disable();
+        http.csrf().disable().cors().disable();
+        //
+        jwtAuthenticationFilter jwtAuthenticationFilter = new jwtAuthenticationFilter(authenticationManagerBean());
+        jwtAuthenticationFilter.setFilterProcessesUrl("appUser/login");
         // Utiliser maintent la notion de StateLess
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Authoriser le refreshToken à passer
@@ -69,6 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/RegionUsers/addUser/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/RegionUsers/users/**").hasAuthority("USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/RegionUsers/profile/**").hasAuthority("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/population/create/**").hasAuthority("ADMIN"); // Ajouter une population d'une region
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/population/read/**").hasAuthority("USER"); // Liste de population d'une Region
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/pays/create/**").hasAuthority("ADMIN"); // Ajouter un Pays
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/pays/read/**").hasAuthority("USER"); // Lister les Pays
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/region/create/**").hasAuthority("ADMIN"); // Ajouter une Région
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/region/read/**").permitAll(); // Lister les Régions
         // toutes les requêtes doivent être identifiées
         http.authorizeRequests().anyRequest().authenticated();
         // Ajoutons les filtres venant de la classe jwtAuthenticationFilter

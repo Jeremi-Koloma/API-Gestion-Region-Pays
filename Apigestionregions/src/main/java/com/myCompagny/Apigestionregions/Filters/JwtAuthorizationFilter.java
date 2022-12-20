@@ -24,6 +24,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     // Cette classe contient une seule méthode, cette méthode s'exécute à chaque requête qui arrive avec le token
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, "
+                + "Content-Type, Access-Control-Request-Method, " + "Access-Control-Request-Headers, Authorization");
+
+        response.addHeader("Access-Control-Expose-Headers",
+                "Access-Control-Allow-Origin, " + "Access-Control-Allow-Credentials, " + "Authorization");
+
+        response.addHeader("Access-Control-Allow-Methods", "GET," + "POST, " + "DELETE");
         // Vérifie si la requête est égale à RefreshToken ou si c'est Login, tu passe
         if (request.getServletPath().equals("/RegionUsers/refreshToken") || request.getServletPath().equals("/login")){
             // Si c'est vrai alors il passe

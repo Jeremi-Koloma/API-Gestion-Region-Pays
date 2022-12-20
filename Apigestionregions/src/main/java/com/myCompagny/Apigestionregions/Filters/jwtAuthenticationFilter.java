@@ -2,8 +2,12 @@ package com.myCompagny.Apigestionregions.Filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myCompagny.Apigestionregions.Controller.JWTUtil;
+import com.myCompagny.Apigestionregions.Modele.AppUser;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,13 +39,20 @@ public class jwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         // Récupérons username et password saisi par l'utilisateur
         System.out.println("--------- Essai d'authentification ----------");
-        String username = request.getParameter("username");
-        String password =  request.getParameter("password");
-        System.out.println(username);
-        System.out.println(password);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE,true);
+        AppUser appUser;
+        try {
+            appUser = objectMapper.readValue(request.getInputStream(),AppUser.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // Essayement de voir les informations de user
+        System.out.println(appUser.getUsername());
+        System.out.println(appUser.getPassword());
         // quand on récupère username et password, on les stocke dans un object de Spring UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, password);
+                new UsernamePasswordAuthenticationToken(appUser.getUsername(), appUser.getPassword());
         // ici on identifie le user
         return authenticationManager.authenticate(authenticationToken);
     }

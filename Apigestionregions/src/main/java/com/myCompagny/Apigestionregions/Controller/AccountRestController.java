@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("RegionUsers")
-@AllArgsConstructor // Pour l'injection de des dépendances, notre Interface Service Account
+@AllArgsConstructor // Pour l'injection de des dépendances, notre Interface Service
+
 public class AccountRestController {
     // Injectons notre serviceAccount
     private AccountService accountService;

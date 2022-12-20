@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController // Identifier la classe comme étant un controller;
 @RequestMapping("population") // le path ou non du lien dans le navigateur;
+@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor // Un constructeur avec tous les arguments pour l'injection de l'interface PopulationsService;
 @Api(value = "hello", description = "Les fonctionnalités de mon API de Tourisme : POPULATION ") // Swagger;
 public class PopulationsController {

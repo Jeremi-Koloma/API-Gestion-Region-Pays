@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // Identifier cette classe comme étant un Controller;
-@RequestMapping("region") // Le path, ou le lien pour le Navigateur
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
+@RequestMapping("/region") // Le path, ou le lien pour le Navigateur
 @AllArgsConstructor // Pour Injectons notre RegionsService;
 @Api(value = "hello", description = "Les fonctionnalités de mon API de Tourisme : REGION") // Swagger;
 public class RegionController {
@@ -29,6 +30,11 @@ public class RegionController {
     @GetMapping("/read")
     public List<Region> read(){
         return regionService.lire(); // la requête (GET) pour READ;
+    }
+
+    @GetMapping("/uneregion/{id}")
+    public Region uneRegion(@PathVariable Long id){
+        return regionService.recupererUneRegion(id);
     }
 
     // Service pour la méthode Modifier;

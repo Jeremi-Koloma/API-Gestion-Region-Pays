@@ -23,6 +23,12 @@ public class RegionServiceImpl implements RegionService {
     public List<Region> lire() {
         return regionRepository.findAll(); // Appélons la méthode (findAll) pour lire;
     }
+
+    @Override
+    public Region recupererUneRegion(Long id) {
+        return regionRepository.findById(id).get();
+    }
+
     // Modifier méthode implémenté;
     @Override
     public Region modifier(Long idRegion, Region region) {
