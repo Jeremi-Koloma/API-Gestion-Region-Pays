@@ -24,7 +24,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("RegionUsers")
+
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
+@RequestMapping("/RegionUsers")
 @AllArgsConstructor // Pour l'injection de des dépendances, notre Interface Service
 
 public class AccountRestController {

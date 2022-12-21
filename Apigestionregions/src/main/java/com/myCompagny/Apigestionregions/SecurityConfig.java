@@ -60,7 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Ici on spécifie les Droits d'accès des requêtes
 
         //Désactiver le token csrf générer Spring sécurity pour qu'il laisse passer les requêtes
-        http.csrf().disable().cors().disable();
+        http.csrf().disable();
+        http.cors().disable(); // côté fontend
         //
         jwtAuthenticationFilter jwtAuthenticationFilter = new jwtAuthenticationFilter(authenticationManagerBean());
         jwtAuthenticationFilter.setFilterProcessesUrl("appUser/login");
@@ -70,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/RegionUsers/refreshToken/**" ,"/login/**").permitAll();
         // Gestion des Droits
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/RegionUsers/addUser/**").hasAuthority("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/RegionUsers/users/**").hasAuthority("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/RegionUsers/users/**").hasAuthority("USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/RegionUsers/profile/**").hasAuthority("USER");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/population/create/**").hasAuthority("ADMIN"); // Ajouter une population d'une region
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/population/read/**").hasAuthority("USER"); // Liste de population d'une Region
