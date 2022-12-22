@@ -78,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/pays/create/**").hasAuthority("ADMIN"); // Ajouter un Pays
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/pays/read/**").hasAuthority("USER"); // Lister les Pays
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/region/create/**").hasAuthority("ADMIN"); // Ajouter une Région
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/region/createAvecImage/**").hasAuthority("ADMIN"); // Ajouter une Région avec image
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/region/read/**").permitAll(); // Lister les Régions
         // toutes les requêtes doivent être identifiées
         http.authorizeRequests().anyRequest().authenticated();

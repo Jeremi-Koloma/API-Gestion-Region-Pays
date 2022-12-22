@@ -32,6 +32,8 @@ public class Region {
     @Column(length = 20)
     private String langueParler;
 
+    private String image;
+
     @ManyToOne // Cardinalité entre Pays et Region;
     @JoinColumn(name = "idPays") //Region (l'entité propriétaire) a une colonne de jointure idPays  qui stocke la valeur idPays et a une clé étrangère vers l' entité Pays
     private Pays pays;

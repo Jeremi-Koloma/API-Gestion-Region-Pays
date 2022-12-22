@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 // Cette interface va etendre l'Interface JpaRepository; avec param Entity(Region, et Id);
 @Repository
 public interface RegionRepository extends JpaRepository<Region, Long> {
+    // Conter le nombre des regions;
 
 }
